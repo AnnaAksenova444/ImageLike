@@ -1,10 +1,3 @@
-//
-//  SceneDelegate.swift
-//  ImageLike
-//
-//  Created by Алексей Аксенов on 05.11.2024.
-//
-
 import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
