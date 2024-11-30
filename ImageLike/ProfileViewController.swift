@@ -2,10 +2,12 @@ import UIKit
 
 final class ProfileViewController: UIViewController {
     
-    private var photoImageView = UIImageView()
-    private var nameLabel = UILabel()
-    private var loginLabel = UILabel()
-    private var characteristicLabel = UILabel()
+    // MARK: - Lifecycle
+    
+    private let photoImageView = UIImageView()
+    private let nameLabel = UILabel()
+    private let loginLabel = UILabel()
+    private let characteristicLabel = UILabel()
     private var exitButton = UIButton()
     
     override func viewDidLoad() {
@@ -15,6 +17,8 @@ final class ProfileViewController: UIViewController {
         createLabels()
         createButton()
     }
+    
+    // MARK: - Private functions
     
     private func createAvatar () {
         photoImageView.image = UIImage.photo
@@ -76,5 +80,7 @@ final class ProfileViewController: UIViewController {
     }
     
     @objc
-    private func didTapLogoutButton() {}
+    private func didTapLogoutButton() {
+        // TODO: - Добавить действие при нажатии на кнопку
+    }
 }
