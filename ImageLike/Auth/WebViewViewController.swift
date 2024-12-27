@@ -62,7 +62,7 @@ final class WebViewViewController: UIViewController {
     
     private func loadAuthView() {
         guard var urlComponents = URLComponents(string: WebViewConstants.unsplashAuthorizeURLString) else {
-            print("Error")
+            print("Error: incorrect URL")
             return
         }
         
@@ -74,7 +74,7 @@ final class WebViewViewController: UIViewController {
         ]
         
         guard let url = urlComponents.url else {
-            print("Error")
+            print("Error: incorrect URL")
             return
         }
         
@@ -85,7 +85,7 @@ final class WebViewViewController: UIViewController {
     // MARK: - Action functions
     
     @IBAction func didTapBackButtonOnWebView(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
+        delegate?.webViewViewControllerDidCancel(self)
     }
 }
 
