@@ -5,10 +5,10 @@ final class OAuth2TokenStorage {
     
     var token: String? {
         get {
-            storage.string(forKey: "token")
+            storage.string(forKey: "imageLike_token")
         }
         set {
-            storage.set(newValue, forKey: "token")
+            storage.set(newValue, forKey: "imageLike_token")
         }
     }
 }
