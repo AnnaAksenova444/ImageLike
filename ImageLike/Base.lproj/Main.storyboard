@@ -214,18 +214,18 @@
             <objects>
                 <viewController id="35b-Yp-ucN" userLabel="Auth" customClass="AuthViewController" customModule="ImageLike" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="7Sx-Hm-V5P">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo_of_Unsplash" translatesAutoresizingMaskIntoConstraints="NO" id="WTf-jk-bPG">
-                                <rect key="frame" x="166.66666666666666" y="336" width="60" height="60"/>
+                                <rect key="frame" x="166.66666666666666" y="324" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="ie9-cZ-xL8"/>
                                     <constraint firstAttribute="height" constant="60" id="qr6-JF-CLU"/>
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u2q-iS-jHw" userLabel="Entry Button">
-                                <rect key="frame" x="16" y="696" width="361" height="48"/>
+                                <rect key="frame" x="16" y="684" width="361" height="48"/>
                                 <color key="backgroundColor" name="YP White "/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="48" id="fNq-nd-dIE"/>
@@ -268,7 +268,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="LHm-Wp-kGv" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="KRC-SX-yVq">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="56"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
@@ -363,7 +363,7 @@
                     </view>
                     <simulatedTabBarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
-                        <segue destination="LHm-Wp-kGv" kind="presentation" identifier="ShowAuthenticationScreen" id="vNk-6T-hoe"/>
+                        <segue destination="LHm-Wp-kGv" kind="presentation" identifier="ShowAuthenticationScreen" modalPresentationStyle="fullScreen" modalTransitionStyle="coverVertical" id="vNk-6T-hoe"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="abH-BB-3N1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>

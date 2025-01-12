@@ -10,12 +10,27 @@ final class ProfileViewController: UIViewController {
     private let characteristicLabel = UILabel()
     private var exitButton = UIButton()
     
+    private var profileImageServiceObserver: NSObjectProtocol?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         createAvatar()
         createLabels()
         createButton()
+        
+        guard let profile = ProfileService.shared.profile else { return }
+        updateLabels(profile: profile)
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.didChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                guard let self else { return }
+                self.updateAvatar()
+            }
+        updateAvatar()
     }
     
     // MARK: - Private functions
@@ -77,6 +92,20 @@ final class ProfileViewController: UIViewController {
             exitButton.heightAnchor.constraint(equalToConstant: 44),
             exitButton.widthAnchor.constraint(equalToConstant: 44)
         ])
+    }
+    
+    private func updateAvatar() {
+        guard
+            let profileImageURL = ProfileImageService.shared.avatarURL,
+            let url = URL(string: profileImageURL)
+        else { return }
+        // TODO [Sprint 11] Обновить аватар, используя Kingfisher
+    }
+    
+    private func updateLabels(profile: Profile) {
+        nameLabel.text = profile.name
+        loginLabel.text = profile.loginName
+        characteristicLabel.text = profile.bio
     }
     
     @objc
