@@ -1,18 +1,17 @@
 import UIKit
 
 struct ProfileResult: Codable {
-    let userName: String
-    let first_name: String
-    let last_name: String
-    let bio: String
-    let profile_image: URL
+    let userName: String?
+    let first_name: String?
+    let last_name: String?
+    let bio: String?
 }
 
 struct Profile {
-    let username: String
-    let name: String
-    let loginName: String
-    let bio: String
+    let username: String?
+    let name: String?
+    let loginName: String?
+    let bio: String?
 }
 
 final class ProfileService {
@@ -52,10 +51,10 @@ final class ProfileService {
             switch result {
             case .success(let data):
                     self.profile = Profile(
-                        username: data.userName,
-                        name: "\(data.first_name) + \(data.last_name)",
-                        loginName: "@ + \(data.userName)",
-                        bio: data.bio)
+                        username: data.userName ?? "",
+                        name: "\(data.first_name ?? "")"+" "+"\(data.last_name ?? "")",
+                        loginName: "@\(data.userName ?? "")",
+                        bio: data.bio ?? "")
                     guard let profile = self.profile else { return }
                     completion(.success(profile))
             case .failure(let error):

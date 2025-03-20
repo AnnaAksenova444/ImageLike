@@ -5,7 +5,7 @@ struct UserResult: Codable {
 }
 
 struct ProfileImage: Codable {
-    let small: String
+    let small: String?
 }
 
 final class ProfileImageService {

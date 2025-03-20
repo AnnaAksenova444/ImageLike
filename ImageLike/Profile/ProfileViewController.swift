@@ -1,4 +1,5 @@
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
@@ -20,7 +21,7 @@ final class ProfileViewController: UIViewController {
         createButton()
         
         guard let profile = ProfileService.shared.profile else { return }
-        updateLabels(profile: profile)
+        
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(
                 forName: ProfileImageService.didChangeNotification,
@@ -31,6 +32,7 @@ final class ProfileViewController: UIViewController {
                 self.updateAvatar()
             }
         updateAvatar()
+        updateLabels(profile: profile)
     }
     
     // MARK: - Private functions
@@ -98,8 +100,16 @@ final class ProfileViewController: UIViewController {
         guard
             let profileImageURL = ProfileImageService.shared.avatarURL,
             let url = URL(string: profileImageURL)
-        else { return }
-        // TODO [Sprint 11] Обновить аватар, используя Kingfisher
+        else { 
+            print("Error: Avatar not found or URL error")
+            return }
+        
+        let processor = RoundCornerImageProcessor(cornerRadius: 36, backgroundColor: .clear)
+        photoImageView.kf.indicatorType = .activity
+        photoImageView.kf.setImage(with: url,
+                                   placeholder: UIImage(named: "tab_profile_active"),
+                                   options:[.processor(processor),
+                                            .cacheSerializer(FormatIndicatedCacheSerializer.png)])
     }
     
     private func updateLabels(profile: Profile) {

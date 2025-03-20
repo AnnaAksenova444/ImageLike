@@ -1,15 +1,20 @@
 import UIKit
+import SwiftKeychainWrapper
 
 final class OAuth2TokenStorage {
-    private let storage: UserDefaults = .standard
+    
+    private let keychainWrapper = KeychainWrapper.standard
     
     var token: String? {
         get {
-            storage.string(forKey: "imageLike_token")
+            keychainWrapper.string(forKey: "imageLike_token")
         }
         set {
-            storage.set(newValue, forKey: "imageLike_token")
+            if let newValue {
+                keychainWrapper.set(newValue, forKey: "imageLike_token")
+            } else {
+                keychainWrapper.removeObject(forKey: "imageLike_token")
+            }
         }
     }
 }
-

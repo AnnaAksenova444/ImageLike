@@ -5,11 +5,22 @@ final class SplashViewController: UIViewController {
     
     // MARK: - Lifecycle
     
-    private let showAuthenticationScreenSegueIdentifier = "ShowAuthenticationScreen"
+    private let logoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage.vector
+        return imageView
+    }()
+    private let showAuthenticationScreenIdentifier = "ShowAuthenticationScreen"
     private let storage = OAuth2TokenStorage()
     private let oauth2Service = OAuth2Service.shared
     private let profileService = ProfileService.shared
     private var username: String = ""
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        configurationView()
+    }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -18,11 +29,29 @@ final class SplashViewController: UIViewController {
             fetchProfile(token)
             switchToTabBarController()
         } else {
-            performSegue(withIdentifier: showAuthenticationScreenSegueIdentifier, sender: nil)
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            guard let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
+            authViewController.delegate = self
+            authViewController.modalPresentationStyle = .fullScreen
+            present(authViewController, animated: true)
         }
     }
     
     // MARK: - Private functions
+    
+    private func configurationView() {
+        
+        view.backgroundColor = .ypBlack
+        view.addSubview(logoImageView)
+        logoImageView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            logoImageView.heightAnchor.constraint(equalToConstant: 77.68),
+            logoImageView.widthAnchor.constraint(equalToConstant: 75),
+            logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            logoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
+    }
     
     private func switchToTabBarController() {
         guard let window = UIApplication.shared.windows.first else {
@@ -32,23 +61,6 @@ final class SplashViewController: UIViewController {
         let tabBarController = UIStoryboard(name: "Main", bundle: .main)
             .instantiateViewController(withIdentifier: "TabBarViewController")
         window.rootViewController = tabBarController
-    }
-}
-
-// MARK: - Prepare
-
-extension SplashViewController {
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == showAuthenticationScreenSegueIdentifier {
-            guard
-                let navigationController = segue.destination as? UINavigationController,
-                let viewController = navigationController.viewControllers[0] as? AuthViewController
-            else {
-                assertionFailure("Failed to prepare for \(showAuthenticationScreenSegueIdentifier)")
-                return
-            }
-            viewController.delegate = self
-        }
     }
 }
 
@@ -85,7 +97,7 @@ extension SplashViewController: AuthViewControllerDelegate {
             guard let self = self else { return }
             switch result {
             case .success(let profile):
-                self.username = profile.username
+                self.username = profile.username ?? ""
                 ProfileImageService.shared.fetchProfileImageURL(username, token) { _ in }
                 self.switchToTabBarController()
             case .failure:

@@ -21,14 +21,14 @@ extension URLSession {
                     if 200..<300 ~= statusCode {
                         fulfillCompletionOnTheMainThread(.success(data))
                     } else {
-                        print("Error: httpStatusCode")
+                        print("Error: httpStatusCode \(NetworkError.httpStatusCode(statusCode))")
                         fulfillCompletionOnTheMainThread(.failure(NetworkError.httpStatusCode(statusCode)))
                     }
                 } else if let error = error {
-                    print("Error: urlRequestError")
+                    print("Error: urlRequestError \(error.localizedDescription)")
                     fulfillCompletionOnTheMainThread(.failure(NetworkError.urlRequestError(error)))
                 } else {
-                    print("Error: urlSessionError")
+                    print("Error: urlSessionError \(NetworkError.urlSessionError)")
                     fulfillCompletionOnTheMainThread(.failure(NetworkError.urlSessionError))
                 }
             })
