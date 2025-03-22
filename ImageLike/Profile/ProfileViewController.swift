@@ -10,7 +10,6 @@ final class ProfileViewController: UIViewController {
     private let loginLabel = UILabel()
     private let characteristicLabel = UILabel()
     private var exitButton = UIButton()
-    
     private var profileImageServiceObserver: NSObjectProtocol?
     
     override func viewDidLoad() {
@@ -21,18 +20,27 @@ final class ProfileViewController: UIViewController {
         createButton()
         
         guard let profile = ProfileService.shared.profile else { return }
+        updateLabels(profile: profile)
         
         profileImageServiceObserver = NotificationCenter.default
             .addObserver(
                 forName: ProfileImageService.didChangeNotification,
                 object: nil,
                 queue: .main
-            ) { [weak self] _ in
-                guard let self else { return }
-                self.updateAvatar()
+            ) { [weak self] notification in
+                guard let self,
+                let userInfo = notification.userInfo,
+                let urlString = userInfo ["URL"] as? String else {
+                    return
+                }
+                self.updateAvatar(with: urlString)
             }
-        updateAvatar()
-        updateLabels(profile: profile)
+        if let avatarURL = ProfileImageService.shared.avatarURL {
+            updateAvatar(with: avatarURL)
+        } else {
+            ProfileImageService.shared.fetchProfileImageURL(profile.userName ?? "", OAuth2TokenStorage().token ?? ""){_ in
+            }
+        }
     }
     
     // MARK: - Private functions
@@ -96,18 +104,17 @@ final class ProfileViewController: UIViewController {
         ])
     }
     
-    private func updateAvatar() {
+    private func updateAvatar(with urlString: String) {
         guard
-            let profileImageURL = ProfileImageService.shared.avatarURL,
-            let url = URL(string: profileImageURL)
-        else { 
+            let url = URL(string: urlString)
+        else {
             print("Error: Avatar not found or URL error")
             return }
         
         let processor = RoundCornerImageProcessor(cornerRadius: 36, backgroundColor: .clear)
         photoImageView.kf.indicatorType = .activity
         photoImageView.kf.setImage(with: url,
-                                   placeholder: UIImage(named: "tab_profile_active"),
+                                   placeholder: UIImage(named: "placeholder.jpeg"),
                                    options:[.processor(processor),
                                             .cacheSerializer(FormatIndicatedCacheSerializer.png)])
     }

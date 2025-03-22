@@ -135,6 +135,7 @@
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                     </imageView>
                                 </subviews>
+                                <color key="backgroundColor" name="YP Background "/>
                                 <viewLayoutGuide key="contentLayoutGuide" id="xbL-SV-7ll"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="NVy-pd-OCf"/>
                                 <connections>
@@ -327,6 +328,9 @@
         <image name="Sharing" width="51" height="51"/>
         <image name="nav_back_button" width="24" height="24"/>
         <image name="tab_editorial_active" width="30" height="30"/>
+        <namedColor name="YP Background ">
+            <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="0.5" colorSpace="custom" customColorSpace="displayP3"/>
+        </namedColor>
         <namedColor name="YP Black">
             <color red="0.10196078431372549" green="0.10588235294117647" blue="0.13333333333333333" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
         </namedColor>

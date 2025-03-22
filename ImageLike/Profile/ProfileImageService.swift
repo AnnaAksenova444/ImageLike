@@ -6,6 +6,8 @@ struct UserResult: Codable {
 
 struct ProfileImage: Codable {
     let small: String?
+    let medium: String?
+    let large: String?
 }
 
 final class ProfileImageService {
@@ -45,14 +47,14 @@ final class ProfileImageService {
             
             switch result {
             case .success(let data):
-                self.avatarURL = data.profile_image.small
-                    guard let avatarURL = self.avatarURL else {return}
-                    completion (.success(avatarURL))
-                    NotificationCenter.default
-                        .post(
-                            name: ProfileImageService.didChangeNotification,
-                            object: self,
-                            userInfo: ["URL": avatarURL])
+                self.avatarURL = data.profile_image.large
+                guard let avatarURL = self.avatarURL else {return}
+                completion (.success(avatarURL))
+                NotificationCenter.default
+                    .post(
+                        name: ProfileImageService.didChangeNotification,
+                        object: self,
+                        userInfo: ["URL": avatarURL])
             case.failure(let error):
                 print("Error: not data available profile image")
                 completion(.failure(error))

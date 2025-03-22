@@ -1,14 +1,14 @@
 import UIKit
 
 struct ProfileResult: Codable {
-    let userName: String?
+    let username: String?
     let first_name: String?
     let last_name: String?
     let bio: String?
 }
 
 struct Profile {
-    let username: String?
+    let userName: String?
     let name: String?
     let loginName: String?
     let bio: String?
@@ -24,7 +24,7 @@ final class ProfileService {
     
     private func profileRequest(_ token: String) -> URLRequest? {
         guard let url = URL(
-            string: "/me" + "?client_id=\(Constants.accessKey)",
+            string: "/me",
             relativeTo: Constants.defaultBaseURL)
         else {
             assertionFailure("Failed to create URL")
@@ -51,9 +51,9 @@ final class ProfileService {
             switch result {
             case .success(let data):
                     self.profile = Profile(
-                        username: data.userName ?? "",
+                        userName: data.username ?? "",
                         name: "\(data.first_name ?? "")"+" "+"\(data.last_name ?? "")",
-                        loginName: "@\(data.userName ?? "")",
+                        loginName: "@\(data.username ?? "")",
                         bio: data.bio ?? "")
                     guard let profile = self.profile else { return }
                     completion(.success(profile))

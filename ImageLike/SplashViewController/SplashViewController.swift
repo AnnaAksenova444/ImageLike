@@ -14,7 +14,7 @@ final class SplashViewController: UIViewController {
     private let storage = OAuth2TokenStorage()
     private let oauth2Service = OAuth2Service.shared
     private let profileService = ProfileService.shared
-    private var username: String = ""
+    private var userName: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,10 +24,10 @@ final class SplashViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
         if storage.token != nil {
             guard let token = storage.token else { return }
             fetchProfile(token)
-            switchToTabBarController()
         } else {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             guard let authViewController = storyboard.instantiateViewController(withIdentifier: "AuthViewController") as? AuthViewController else { return }
@@ -97,8 +97,8 @@ extension SplashViewController: AuthViewControllerDelegate {
             guard let self = self else { return }
             switch result {
             case .success(let profile):
-                self.username = profile.username ?? ""
-                ProfileImageService.shared.fetchProfileImageURL(username, token) { _ in }
+                self.userName = profile.userName ?? ""
+                ProfileImageService.shared.fetchProfileImageURL(userName, token) { _ in }
                 self.switchToTabBarController()
             case .failure:
                 print("Error: fetch profile")
