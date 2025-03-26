@@ -47,7 +47,7 @@ final class ProfileImageService {
             
             switch result {
             case .success(let data):
-                self.avatarURL = data.profile_image.large
+                self.avatarURL = data.profile_image.small
                 guard let avatarURL = self.avatarURL else {return}
                 completion (.success(avatarURL))
                 NotificationCenter.default
@@ -56,8 +56,8 @@ final class ProfileImageService {
                         object: self,
                         userInfo: ["URL": avatarURL])
             case.failure(let error):
-                print("Error: not data available profile image")
                 completion(.failure(error))
+                print("[ProfileImageService.fetchProfileImageURL]: [Not data available profile image]: [Error:\(error.localizedDescription)]")
             }
             self.task = nil
         }

@@ -28,6 +28,7 @@ final class OAuth2Service {
         
         guard let url = urlComponents.url else {
             assertionFailure("Failed to create URL")
+            print("[OAuth2Service.makeUrlRequest]: [Failed to create URL from components: \(urlComponents.string ?? "nil")]")
             return nil
         }
         
@@ -42,6 +43,7 @@ final class OAuth2Service {
         assert(Thread.isMainThread)
         guard lastCode != code else {
             completion(.failure(AuthServiceError.invalidRequest))
+            print("[OAuth2Service.fetchOAuthToken]: [Authorization code was already used. lastCode = \(lastCode ?? "nil"), currentCode = \(code)]")
             return
         }
         
@@ -49,7 +51,8 @@ final class OAuth2Service {
         lastCode = code
         
         guard let request = makeUrlRequest(code: code) else {
-            print("Error: incorrect URL")
+            completion(.failure(AuthServiceError.invalidRequest))
+            print("[OAuth2Service.fetchOAuthToken]:[Incorrect request]-[Error: \(AuthServiceError.invalidRequest)")
             return
         }
         
@@ -63,8 +66,8 @@ final class OAuth2Service {
                     guard let authToken else { return }
                     completion(.success(authToken))
             case .failure(let error):
-                print("Error: not data available")
                 completion(.failure(error))
+                print("[OAuth2Service.fetchOAuthToken:[Incorrect token]-[Error: \(error.localizedDescription)]")
             }
             self.task = nil
             self.lastCode = nil

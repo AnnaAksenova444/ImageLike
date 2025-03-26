@@ -23,13 +23,14 @@ extension URLSession {
                     } else {
                         print("Error: httpStatusCode \(NetworkError.httpStatusCode(statusCode))")
                         fulfillCompletionOnTheMainThread(.failure(NetworkError.httpStatusCode(statusCode)))
+                        print("[URLSession.data]: [Invalid HTTP Status Code:\(NetworkError.httpStatusCode(statusCode))]")
                     }
                 } else if let error = error {
-                    print("Error: urlRequestError \(error.localizedDescription)")
                     fulfillCompletionOnTheMainThread(.failure(NetworkError.urlRequestError(error)))
+                    print("[URLSession.data]: [URLRequest error:\(error.localizedDescription)]")
                 } else {
-                    print("Error: urlSessionError \(NetworkError.urlSessionError)")
                     fulfillCompletionOnTheMainThread(.failure(NetworkError.urlSessionError))
+                    print("[URLSession.data]: [URLSession error:\(NetworkError.urlSessionError)]")
                 }
             })
             return task
@@ -47,12 +48,12 @@ extension URLSession {
                         let response = try decoder.decode(T.self, from: data)
                         completion (.success(response))
                     } catch {
-                        print("Error: data not decode in objectTask")
                         completion (.failure(error))
+                        print("[URLSession.objectTask]: [Data not decode]:[Error:\(error.localizedDescription)] Data: \(String(data: data, encoding: .utf8) ?? "")")
                     }
                 case .failure(let error):
-                    print("Error: not data available in objectTask")
                     completion (.failure(error))
+                    print("[URLSession.objectTask]:[Not data available]:[Error:\(error.localizedDescription)]")
                 }
             }
             return task

@@ -58,8 +58,8 @@ final class ProfileService {
                     guard let profile = self.profile else { return }
                     completion(.success(profile))
             case .failure(let error):
-                print("Error: not data available profile")
                 completion(.failure(error))
+                print("[ProfileService.fetchProfile]: [Not data available profile]: [Error:\(error.localizedDescription)]")
             }
             self.task = nil
         }

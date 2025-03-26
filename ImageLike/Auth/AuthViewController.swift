@@ -1,5 +1,4 @@
 import UIKit
-import ProgressHUD
 
 final class AuthViewController: UIViewController {
     
@@ -36,7 +35,15 @@ final class AuthViewController: UIViewController {
                 self.dismiss(animated: true)
             }
         alert.addAction(action)
-        present(alert,animated: true)
+        guard let rootViewController = UIApplication.shared.windows.first?.rootViewController else { return }
+        if var topViewController = rootViewController.presentedViewController {
+            while let presented = topViewController.presentedViewController {
+                topViewController = presented
+            }
+            topViewController.present(alert, animated: true)
+            return
+        }
+        rootViewController.present(alert,animated: true)
     }
 }
 

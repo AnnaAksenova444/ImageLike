@@ -5,7 +5,7 @@ final class SplashViewController: UIViewController {
     
     // MARK: - Lifecycle
     
-    private let logoImageView: UIImageView = {
+    private lazy var logoImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage.vector
         return imageView
@@ -14,6 +14,7 @@ final class SplashViewController: UIViewController {
     private let storage = OAuth2TokenStorage()
     private let oauth2Service = OAuth2Service.shared
     private let profileService = ProfileService.shared
+    private let authViewController = AuthViewController()
     private var userName: String = ""
     
     override func viewDidLoad() {
@@ -101,6 +102,7 @@ extension SplashViewController: AuthViewControllerDelegate {
                 ProfileImageService.shared.fetchProfileImageURL(userName, token) { _ in }
                 self.switchToTabBarController()
             case .failure:
+                authViewController.showAlertError()
                 print("Error: fetch profile")
                 break
             }
