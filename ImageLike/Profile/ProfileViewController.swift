@@ -1,4 +1,5 @@
 import UIKit
+import Kingfisher
 
 final class ProfileViewController: UIViewController {
     
@@ -9,13 +10,39 @@ final class ProfileViewController: UIViewController {
     private let loginLabel = UILabel()
     private let characteristicLabel = UILabel()
     private var exitButton = UIButton()
+    private var profileImageServiceObserver: NSObjectProtocol?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        view.backgroundColor = .ypBlack
+        
         createAvatar()
         createLabels()
         createButton()
+        
+        guard let profile = ProfileService.shared.profile else { return }
+        updateLabels(profile: profile)
+        
+        profileImageServiceObserver = NotificationCenter.default
+            .addObserver(
+                forName: ProfileImageService.didChangeNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] notification in
+                guard let self,
+                let userInfo = notification.userInfo,
+                let urlString = userInfo ["URL"] as? String else {
+                    return
+                }
+                self.updateAvatar(with: urlString)
+            }
+        if let avatarURL = ProfileImageService.shared.avatarURL {
+            updateAvatar(with: avatarURL)
+        } else {
+            ProfileImageService.shared.fetchProfileImageURL(profile.userName ?? "", OAuth2TokenStorage().token ?? ""){_ in
+            }
+        }
     }
     
     // MARK: - Private functions
@@ -77,6 +104,27 @@ final class ProfileViewController: UIViewController {
             exitButton.heightAnchor.constraint(equalToConstant: 44),
             exitButton.widthAnchor.constraint(equalToConstant: 44)
         ])
+    }
+    
+    private func updateAvatar(with urlString: String) {
+        guard
+            let url = URL(string: urlString)
+        else {
+            print("Error: Avatar not found or URL error")
+            return }
+        
+        let processor = RoundCornerImageProcessor(cornerRadius: 36, backgroundColor: .clear)
+        photoImageView.kf.indicatorType = .activity
+        photoImageView.kf.setImage(with: url,
+                                   placeholder: UIImage(named: "placeholder.jpeg"),
+                                   options:[.processor(processor),
+                                            .cacheSerializer(FormatIndicatedCacheSerializer.png)])
+    }
+    
+    private func updateLabels(profile: Profile) {
+        nameLabel.text = profile.name
+        loginLabel.text = profile.loginName
+        characteristicLabel.text = profile.bio
     }
     
     @objc
